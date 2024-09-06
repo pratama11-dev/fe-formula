@@ -14,7 +14,7 @@ export default function LoginPage(session: Sessions) {
         overflowY: "hidden",
       }}
     >
-      <HeadPage title="PPIC Login Page" />
+      <HeadPage title="Formula Login Page" />
       <ThemeBackground />
       <LoginForm session={session} style={{ width: "100%" }} />
     </div>

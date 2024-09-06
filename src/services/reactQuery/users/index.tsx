@@ -1,14 +1,15 @@
-import { IDefaultApiExclude } from "types/api/params";
+import { IDefaultApi, IDefaultApiExclude, IDefaultApiMinimum } from "types/api/params";
 import useQueryHooks from "../customHooks/useQueryHooks";
 import { IUser } from "types/Users";
 
-interface props3 extends IDefaultApiExclude<"filters" | "pagination"> { }
-export const useUserQuery = (data: props3) => {
+export const useUserQuery = (
+  data: IDefaultApi
+) => {
   const { enabled } = data;
 
   return useQueryHooks(data).config<IUser[], any>({
-    data: [],
-    api: "/public/users/list",
+    data: ["pagination", "search"],
+    api: "/api/users/list",
     key: "useUserQuery",
     method: "POST",
     config: {
@@ -18,3 +19,21 @@ export const useUserQuery = (data: props3) => {
     },
   });
 };
+
+// export const useListPr = (
+//   data: IDefaultApiMinimum & { search?: string, mode?: string, user_role?: string, filters?: any}
+// ) => {
+//   const { enabled } = data;
+
+//   return useQueryHooks(data).config<any[], any>({
+//       data: ["pagination", "search", "mode", "user_role", "filters"],
+//       api: "/api/users/list",
+//       key: "useListPr",
+//       method: "POST",
+//       config: {
+//           enabled: enabled ?? false,
+//           refetchOnWindowFocus: true,
+//           keepPreviousData: false,
+//       },
+//   });
+// };

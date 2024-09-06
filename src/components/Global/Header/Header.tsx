@@ -61,7 +61,7 @@ function Header({ session }: HeaderProps) {
             <Col xs={12} sm={12} md={12} lg={12}>
               <Row align="middle">
                 <p id="headerTittle" style={logoTextStyle}>
-                  PPIC PG
+                  FORMULA
                 </p>
               </Row>
             </Col>
@@ -124,7 +124,7 @@ function Header({ session }: HeaderProps) {
             <Col xs={12} sm={12} md={12} lg={12}>
               <Row align="middle">
                 <p id="headerTittle" style={logoTextStyle}>
-                  PPIC PG
+                  FORMULA
                 </p>
               </Row>
             </Col>

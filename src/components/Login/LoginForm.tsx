@@ -10,7 +10,11 @@ interface ILoginForm extends ColProps, React.RefAttributes<HTMLDivElement> {
 
 function LoginForm({ session, ...props }: ILoginForm) {
   const [form] = Form.useForm();
-  const { handleLogin, handleLoginGoogle, isLoading } = useAuth(session);
+  const { 
+    handleLogin, 
+    // handleLoginGoogle, 
+    isLoading 
+  } = useAuth(session);
 
   const doLogin = () => {
     form.validateFields().then(async (v) => {
@@ -45,15 +49,6 @@ function LoginForm({ session, ...props }: ILoginForm) {
           gap: 10,
         }}
       >
-        {/* <Image
-          src="/Images/logo_SPG.png"
-          alt="logo spg"
-          preview={false}
-          width={200}
-        />
-        <h2 style={{ fontSize: "13px", letterSpacing: "1px" }}>
-          System Pelitra Gunawan
-        </h2> */}
       </div>
       <h3 style={{ fontSize: "34px", letterSpacing: "3px" }}>Welcome Back!</h3>
       <Col lg={12} span={24} {...props}>
@@ -148,23 +143,6 @@ function LoginForm({ session, ...props }: ILoginForm) {
               </Form.Item>
             </Form>
           </Col>
-        </Row>
-        <Row align="middle" justify="center">
-          <Divider
-            style={{ color: themeColor.dark, borderColor: themeColor.dark }}
-            orientation="center"
-          >
-            Or Login With
-          </Divider>
-          <Button
-            loading={isLoading.google}
-            onClick={handleLoginGoogle}
-            icon={<GoogleOutlined rev="span" />}
-            type="link"
-            style={{ fontSize: "1.5rem" }}
-          >
-            Google
-          </Button>
         </Row>
       </Col>
     </div>

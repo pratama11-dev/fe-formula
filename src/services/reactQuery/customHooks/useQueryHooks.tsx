@@ -6,7 +6,7 @@ import {
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
-import { IQueryResponse } from "types/api/queryRes";
+import { ApiResponseProperties, IQueryResponse } from "types/api/queryRes";
 import { Sessions } from "types/Session";
 
 type TConfig = Omit<
@@ -46,14 +46,14 @@ const useQueryHooks = (dataRequire: IDataRequire) => {
 
   const { FetcherPost, FetcherGet } = useFetcher(session!);
 
-  const useConfig: <T, K>(
+  const useConfig: <T, K extends {}>(
     configParams: IConfigParams
   ) => UseQueryResult<IQueryResponse<T, K>, unknown> = ({
     data: dataKey = [],
     key = "",
     api = "",
     method = "POST",
-    config: configParams = {},
+    config: configParams,
   }: IConfigParams) => {
     const keys: PickerConfig<"data"> = [];
     dataKey.forEach((k) => {
@@ -62,9 +62,10 @@ const useQueryHooks = (dataRequire: IDataRequire) => {
     const params = { ...dataRequire };
     delete params.session;
     if (dataKey.includes("pagination")) {
-      const limit = params.pagination.pageSize ?? 0;
-      const offset = params.pagination.pageSize * (params.pagination.current - 1);
-      delete params.pagination;
+      const limit = params?.pagination?.pageSize ?? 0;
+      const offset =
+        params?.pagination?.pageSize * (params?.pagination?.current - 1);
+      delete params?.pagination;
       params.pagination = {
         take: limit,
         skip: offset,
@@ -82,11 +83,12 @@ const useQueryHooks = (dataRequire: IDataRequire) => {
       queryKey: [key, ...keys],
       queryFn:
         method === "POST"
-          ? () => FetcherPost({
-            url: api,
-            api: "API",
-            data: params,
-          })
+          ? () =>
+              FetcherPost({
+                url: api,
+                api: "API",
+                data: params,
+              })
           : () => FetcherGet({ url: api, api: "API" }),
       config,
     };

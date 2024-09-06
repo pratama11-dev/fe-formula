@@ -54,7 +54,8 @@ function ThemeBackground() {
             gap: "20px",
           }}
         >
-          <Image
+          <h3>Put Your Logo</h3>
+          {/* <Image
             src="/Images/logo_Login.png"
             style={{
               zIndex: 1,
@@ -62,7 +63,7 @@ function ThemeBackground() {
             }}
             alt="logo login"
             preview={false}
-          />
+          /> */}
           <h1
             style={{
               color: "white",

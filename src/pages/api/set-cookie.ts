@@ -23,7 +23,7 @@ export default async function handler(
     time += 3600 * 1000 * 24;
     now.setTime(time);
 
-    const data = `${"sso"}=${token};`;
+    const data = `${"formula"}=${token};`;
     const expires = `expires=${now.toUTCString()};`;
     const path = "path=/;";
     const domain = `domain=${

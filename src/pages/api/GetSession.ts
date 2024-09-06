@@ -18,19 +18,19 @@ export default async function handleSessions(
   const sessionUser = await getSessionFromHeader(ctx.req);
 
   if (sessionUser.code === 0) {
-    const role = sessionUser?.data?.data?.sso_user_roles_platform_pivot?.find(
-      (d: any) => d.sso_platforms?.client_id === process.env.NEXT_PUBLIC_CLIENT_ID
-    )?.sso_roles?.roles_name ?? "norole";
-    if (needLogin) {
-      if (role === "norole") {
-        return {
-          redirect: {
-            destination: `${process.env.NEXT_PUBLIC_SSOFE_URL}?code=no-roles`,
-            permanent: false,
-          },
-        };
-      }
-    }
+    // const role = sessionUser?.data?.data?.sso_user_roles_platform_pivot?.find(
+    //   (d: any) => d.sso_platforms?.client_id === process.env.NEXT_PUBLIC_CLIENT_ID
+    // )?.sso_roles?.roles_name ?? "norole";
+    // if (needLogin) {
+    //   if (role === "norole") {
+    //     return {
+    //       redirect: {
+    //         destination: `${process.env.NEXT_PUBLIC_SSOFE_URL}?code=no-roles`,
+    //         permanent: false,
+    //       },
+    //     };
+    //   }
+    // }
     if (fromLogin) {
       return {
         redirect: {

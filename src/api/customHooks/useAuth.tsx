@@ -18,30 +18,30 @@ const useAuth = (session?: Sessions) => {
   const router = useRouter();
   const { code } = router?.query ? router.query : { code: "2" };
 
-  const handleLoginGoogle = async () => {
-    setError("");
-    setLoading((prev) => ({ ...prev, google: true }));
-    try {
-      const url = await FetcherPost({
-        url: `/public/v1/request-oauth-google`,
-        api: "SSO",
-        data: {
-          client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
-        },
-      });
-      if (url?.data?.data) {
-        window.location.href = url.data.data;
-      }
-      return true;
-    } catch (error: any) {
-      const info = error?.response?.data?.message ?? error?.message;
-      showError("error", info);
-      setError(error);
-      return { ...info };
-    } finally {
-      setLoading((prev) => ({ ...prev, google: false }));
-    }
-  };
+  // const handleLoginGoogle = async () => {
+  //   setError("");
+  //   setLoading((prev) => ({ ...prev, google: true }));
+  //   try {
+  //     const url = await FetcherPost({
+  //       url: `/public/v1/request-oauth-google`,
+  //       api: "SSO",
+  //       data: {
+  //         client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
+  //       },
+  //     });
+  //     if (url?.data?.data) {
+  //       window.location.href = url.data.data;
+  //     }
+  //     return true;
+  //   } catch (error: any) {
+  //     const info = error?.response?.data?.message ?? error?.message;
+  //     showError("error", info);
+  //     setError(error);
+  //     return { ...info };
+  //   } finally {
+  //     setLoading((prev) => ({ ...prev, google: false }));
+  //   }
+  // };
 
   const handleLogin = async ({
     email,
@@ -172,7 +172,7 @@ const useAuth = (session?: Sessions) => {
 
   const property = {
     handleLogin,
-    handleLoginGoogle,
+    // handleLoginGoogle,
     handleLogout,
     restore,
     isLoading,
