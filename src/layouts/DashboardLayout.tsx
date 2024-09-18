@@ -154,9 +154,9 @@ function DashboardLayout({
               className="site-layout-background"
               style={{
                 background,
-                overflowX: "scroll",
-                padding: isMobile || background ? 0 : 24,
-                minHeight: 360,
+                overflowX: isMobile ? "hidden" : "scroll",
+                padding: isMobile || background ? 10 : 24,
+                // minHeight: 360,
                 borderRadius: 8,
               }}
             >
@@ -165,7 +165,7 @@ function DashboardLayout({
           </div>
 
           <Footer style={{ textAlign: "center" }}>
-            ©
+            FORMULA ©
             {' '}
             {moment().year()}
           </Footer>

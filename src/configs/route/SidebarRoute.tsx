@@ -13,9 +13,9 @@ export const AdminRoutes: routesType = [
     children: [],
   },
   {
-    path: "/planning",
-    key: "planning",
-    name: "Planning",
+    path: "/event",
+    key: "event",
+    name: "Event",
     icon: <SlNotebook />,
     children: [],
   }

@@ -44,7 +44,7 @@ function HeaderOur({ session, toggleDrawer }: HeaderProps) {
           className="site-layout-background"
           style={{
             padding: 0,
-            background: isMobile ? themeColor.signatureColor : "transparent",
+            background: isMobile ? themeColor.darkBlue : "transparent",
             // background: isNotDashboard(router)
             //   ? themeColor.headerPrimary
             //   : themeColor.light,

@@ -16,13 +16,6 @@ function Home(session: Sessions) {
   const debouncedSearch = useDebounce<string>(search, 500)
 
 
-  const dataUser = useUserQuery({
-    session: session,
-    pagination: {},
-    enabled: true
-  })
-
-
   return (
     <>
       <HeadPage title="Home Page" />
