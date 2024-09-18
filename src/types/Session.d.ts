@@ -26,8 +26,10 @@ export interface SsoUserRolesPlatformPivot {
 }
 
 export interface Data {
-  sso_user_permissions?: SsoPermissions[];
-  sso_user_roles_platform_pivot?: SsoUserRolesPlatformPivot[];
+  user_role: {
+    id?: number
+    role?: string
+  }
 }
 
 export interface User {

@@ -54,7 +54,7 @@ function ThemeBackground() {
             gap: "20px",
           }}
         >
-          <h3>Put Your Logo</h3>
+          <h3> x FORMULA</h3>
           {/* <Image
             src="/Images/logo_Login.png"
             style={{

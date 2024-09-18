@@ -132,11 +132,11 @@ a {
   background-color: #727c9e;
 }
 
-.ant-menu.ant-menu-dark,
+/* .ant-menu.ant-menu-dark,
 .ant-menu-dark .ant-menu-sub,
 .ant-menu.ant-menu-dark .ant-menu-sub {
   background: #3e4c5f;
-}
+} */
 
 .ant-modal-content {
   border-radius: 15px;

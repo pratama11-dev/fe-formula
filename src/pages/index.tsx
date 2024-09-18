@@ -6,6 +6,7 @@ import { useUserQuery } from "@services/reactQuery/users";
 import useDebounce from "@utils/helpers/customHooks/useDebounce";
 import handleSessions from "./api/GetSession";
 import DashboardLayout from "@layouts/DashboardLayout";
+import Card from "antd/es/card/Card";
 
 function Home(session: Sessions) {
   useNavbar(["home"], [{ name: "Home", url: "/" }]);

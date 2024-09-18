@@ -59,7 +59,7 @@ const useFetcher = (sessions?: Sessions) => {
     try {
       const response = await axios.post(fixUrl, data, {
         headers: {
-          Authorization: `Bearer ${sessions?.token}` ?? "",
+          Authorization: `Bearer ${sessions?.token || ""}`,
         },
       });
 
@@ -107,7 +107,7 @@ const useFetcher = (sessions?: Sessions) => {
     try {
       const response = await axios.get(fixUrl, {
         headers: {
-          Authorization: `Bearer ${sessions?.token}` ?? "",
+          Authorization: `Bearer ${sessions?.token || ""}`,
         },
       });
 
