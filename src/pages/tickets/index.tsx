@@ -67,7 +67,7 @@ const TicketsPage = (session: Sessions) => {
                     <Col xs={4} sm={4} md={4} lg={4}>
                         <Button
                             // loading={isLoading}
-                            onClick={() => { PushNavigateTo("tickets/add") }}
+                            onClick={() => { setModal(true) }}
                             block={isMobile}
                             type="primary"
                             style={{ width: "100%" }}

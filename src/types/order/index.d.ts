@@ -14,7 +14,7 @@ export interface IOrder {
 }
 
 export interface IOrderItem {
-    id?: string
+    id?: number
     id_order?: number
     id_ticket?: number
     id_event?: number

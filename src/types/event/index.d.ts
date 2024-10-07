@@ -8,7 +8,7 @@ export interface IEvent {
     id_order_item?: number
     create_at?: string
     updated_at?: string
-    order_item?: IOrderItem[]
+    order_item?: IOrderItem
     event_status: IEventStatus
 }
 

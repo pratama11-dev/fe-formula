@@ -32,23 +32,22 @@ const TicketTable = ({
     const uq = useQueryClient();
     const { FetcherPost, isLoading } = useFetcher(session);
 
-    const doDelete = async (id: number, id_order_item: number) => {
+    const doDelete = async (id: number) => {
         FetcherPost({
             api: "API",
             url: `/api/ticket/delete`,
             data: {
-                id,
-                id_order_item
+                id
             }
         }).then((d) => {
             if (d.status === 200) {
                 uq.invalidateQueries([
-                    "useDetailPr",
+                    "useTicketQuery",
                 ])
                 uq.refetchQueries([
-                    "useDetailPr",
+                    "useTicketQuery",
                 ])
-                showSuccess("Success", `Berhasil menghapus PR Doc`)
+                showSuccess("Success", `Berhasil menghapus Ticket`)
             }
         })
     }
@@ -130,7 +129,7 @@ const TicketTable = ({
                         if (item?.is_active === 1) {
                             return <Tag color="green">Active</Tag>
                         } else {
-                            return <Tag color="red">None</Tag>
+                            return <Tag color="red">NOT SCAN</Tag>
                         }
                     }}
                 />
@@ -142,7 +141,7 @@ const TicketTable = ({
                             <Popconfirm
                                 title="Delete?"
                                 description="Are you sure to delete this data?"
-                                onConfirm={() => { doDelete(item?.id ?? 0, item?.id_order_item ?? 0) }}
+                                onConfirm={() => { doDelete(item?.order_item?.id ?? 0) }}
                                 okText="Yes"
                                 cancelText="No"
                             >
