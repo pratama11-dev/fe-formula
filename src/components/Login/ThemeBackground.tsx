@@ -54,16 +54,16 @@ function ThemeBackground() {
             gap: "20px",
           }}
         >
-          <h3> x FORMULA</h3>
-          {/* <Image
-            src="/Images/logo_Login.png"
+          {/* <h1></h1> */}
+          <Image
+            src="/Images/logo_gs.png"
             style={{
               zIndex: 1,
-              width: isTablet ? "350px" : "470px",
+              width: isTablet ? "180px" : "280px",
             }}
             alt="logo login"
             preview={false}
-          /> */}
+          />
           <h1
             style={{
               color: "white",
@@ -72,7 +72,7 @@ function ThemeBackground() {
               fontSize: isTablet ? "19px" : "30px",
             }}
           >
-            {/* Production Planning Inventory Control */}
+            GS x FORMULA
           </h1>
         </span>
       </div>

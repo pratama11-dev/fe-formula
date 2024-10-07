@@ -4,18 +4,17 @@ import HeadPage from "@components/Global/Header/HeadPage";
 import DashboardLayout from "@layouts/DashboardLayout";
 import useNavbar from "@layouts/customHooks/useNavbar";
 import { useState } from "react";
-import { Button, Col, Input, Row, TablePaginationConfig } from "antd";
+import { Col, Input, Row, TablePaginationConfig } from "antd";
 import { FilterValue } from "antd/es/table/interface";
 import useDebounce from "@utils/helpers/customHooks/useDebounce";
 import useWindowSize from "@utils/helpers/ReactHelper";
-import { useEventQuery } from "@services/reactQuery/event";
-import EventTable from "@components/Event/TableEvent";
-import ModalEvent from "@components/Event/ModalEvent";
-import { PlusOutlined } from "@ant-design/icons";
+
+import { useOrderQuery, useTicketQuery } from "@services/reactQuery/ticket";
+import OrderTable from "@components/Order/OrderTicket";
 
 
-const EventPage = (session: Sessions) => {
-    useNavbar(["event"], [{ name: "Event", url: "/event" }]);
+const TicketsPage = (session: Sessions) => {
+    useNavbar(["orders"], [{ name: "Orders", url: "/orders" }]);
     const { isMobile } = useWindowSize();
 
     const [paginationTable1, setPaginationTable1] = useState<TablePaginationConfig>({
@@ -26,10 +25,9 @@ const EventPage = (session: Sessions) => {
 
     const [search, setSearch] = useState("");
     const [filters, setFilters] = useState<Record<string, FilterValue | null>>();
-    const [modal, setModal] = useState(false)
     const debouncedSearch = useDebounce(search, 500);
 
-    const dataListEvent = useEventQuery({
+    const dataListOrder = useOrderQuery({
         session: session,
         pagination: paginationTable1,
         search: debouncedSearch,
@@ -37,53 +35,33 @@ const EventPage = (session: Sessions) => {
         filters
     })
 
-    const dataList = dataListEvent?.data?.data?.data
+    const dataList = dataListOrder?.data?.data?.data
 
     return (
         <>
-            <HeadPage withDefaultCss title="Event" />
+            <HeadPage withDefaultCss title="Orders" />
             <DashboardLayout session={session}>
-
                 <Row justify="space-between" align="middle" gutter={[10, 20]}>
-                    <Col xs={20} sm={20} md={20} lg={20}>
+                    <Col xs={24} sm={24} md={24} lg={24}>
                         <Input.Search
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search by name event"
                         />
                     </Col>
-                    <Col xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                            // loading={isLoading}
-                            onClick={() => { setModal(true) }}
-                            block={isMobile}
-                            type="primary"
-                            style={{ width: "100%" }}
-                            icon={<PlusOutlined rev={""} />}
-                        >
-                            {isMobile ? "" : "Add Event"}
-                        </Button>
-                    </Col>
                 </Row>
 
                 <div style={{ height: "10px" }} />
 
-                <EventTable
+                <OrderTable
                     session={session}
                     data={dataList ?? []}
-                    loading={dataListEvent.isLoading}
+                    loading={dataListOrder.isLoading}
                     onChange={(pg, ft) => {
                         setPaginationTable1(pg);
                         setFilters(ft);
                     }}
-                    pagination={{ ...paginationTable1, total: dataListEvent?.data?.data?.total }}
+                    pagination={{ ...paginationTable1, total: dataListOrder?.data?.data?.total }}
                 />
-
-                <ModalEvent 
-                    session={session}
-                    visible={modal}
-                    setVisible={setModal}
-                />
-
             </DashboardLayout>
         </>
     )
@@ -94,4 +72,4 @@ export async function getServerSideProps(context: any) {
     return checkSessions;
 }
 
-export default EventPage;
+export default TicketsPage;
