@@ -1,10 +1,11 @@
-import { IOrderItem } from "../event"
+// import { IOrderItem } from "../event"
 
 export interface ITicket {
     id?: number;
     id_order_item?: number;
     qr_code?: string;
     ticket_owner?: string;
+    scan_at?: string
     doc_ticket_owner?: string;
     is_active?: number;
     price?: string;
@@ -49,5 +50,6 @@ export interface IOrders {
     user?: {
         name: string,
         no_document: string
+        email: string
     }
 }

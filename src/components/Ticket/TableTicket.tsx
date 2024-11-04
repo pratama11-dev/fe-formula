@@ -5,13 +5,15 @@ import { IEvent } from "types/event/index";
 import customFooterPagination from "@components/Partial/customFooterPagination";
 import moment from "moment";
 import getUserRole from "@utils/helpers/getUserRoles";
-import { DeleteFilled, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteFilled, DeleteOutlined, EditOutlined, PrinterOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import useFetcher from "@api/customHooks/useFetcher";
 import { showSuccess } from "@utils/helpers/AntdHelper";
 import { useQueryClient } from "@tanstack/react-query";
 import { ITicket } from "types/ticket/index";
 import UnitConvert from "@components/Util/UnitConvert";
+import ModalPrintReceipt from "./ModalPrintReceipt";
+import ModalPrintTicketQr from "./ModalPrintTicketQr";
 
 interface ITableTicket {
     session: Sessions | undefined;
@@ -31,6 +33,9 @@ const TicketTable = ({
     const role = getUserRole(session)
     const uq = useQueryClient();
     const { FetcherPost, isLoading } = useFetcher(session);
+
+    const [modal, setModal] = useState<boolean>(false)
+    const [id, setId] = useState<number | null>()
 
     const doDelete = async (id: number) => {
         FetcherPost({
@@ -123,6 +128,11 @@ const TicketTable = ({
                     render={(_value, item: ITicket) => item?.order_item?.event?.name}
                 />
                 <Table.Column
+                    title="Scan At?"
+                    dataIndex="scan_at"
+                    render={(_value, item: ITicket) => UnitConvert?.FormatDateClassic(item?.scan_at)}
+                />
+                <Table.Column
                     title="Status"
                     dataIndex="status"
                     render={(_value, item: ITicket) => {
@@ -134,9 +144,22 @@ const TicketTable = ({
                     }}
                 />
                 <Table.Column
+                    title="Status Order"
+                    dataIndex="status"
+                    render={(_value, item: ITicket) => {
+                        if (item?.order_item?.orders?.id_status === 1) {
+                            return <Tag color="red">Unpaid</Tag>
+                        } else if (item?.order_item?.orders?.id_status === 2) {
+                            return <Tag color="green">Paid</Tag>
+                        } else {
+                            return <Tag color="blue">Active</Tag>
+                        }
+                    }}
+                />
+                <Table.Column
                     title="Action"
                     dataIndex="Action"
-                    render={(_value, item: IEvent) => (
+                    render={(_value, item: ITicket) => (
                         <>
                             <Popconfirm
                                 title="Delete?"
@@ -144,34 +167,35 @@ const TicketTable = ({
                                 onConfirm={() => { doDelete(item?.order_item?.id ?? 0) }}
                                 okText="Yes"
                                 cancelText="No"
+                                disabled={item?.is_active == 1}
                             >
-                                <DeleteFilled rev={''} style={{ marginLeft: 5, color: "red" }} />
+                                <DeleteFilled
+                                    rev={''}
+                                    style={{
+                                        marginLeft: 5,
+                                        color: "red"
+                                    }}
+                                />
                             </Popconfirm>
-                            {/* <Button
+                            <Button
                                 type="link"
-                                icon={<EditOutlined rev={""} />}
+                                icon={<PrinterOutlined rev={""} />}
                                 onClick={() => {
-                                    setSelectedData(item)
                                     setModal(true)
+                                    setId(item?.id)
                                 }}
                             />
-                            <Popconfirm
-                                title="Delete?"
-                                description="Are you sure to delete this data?"
-                                onConfirm={() => { onDelete(item?.id as number) }}
-                                okText="Yes"
-                                cancelText="No"
-                            >
-                                <Button
-                                    type="link"
-                                    icon={<DeleteOutlined rev={""} />}
-                                    danger
-                                />
-                            </Popconfirm> */}
                         </>
                     )}
                 />
             </Table>
+
+            <ModalPrintTicketQr
+                session={session}
+                setVisible={setModal}
+                visible={modal}
+                id={id}
+            />
         </>
     )
 }

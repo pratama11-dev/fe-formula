@@ -4,7 +4,7 @@ import HeadPage from "@components/Global/Header/HeadPage";
 import DashboardLayout from "@layouts/DashboardLayout";
 import useNavbar from "@layouts/customHooks/useNavbar";
 import { useState } from "react";
-import { Button, Col, Input, Row, TablePaginationConfig } from "antd";
+import { Button, Col, Dropdown, Input, MenuProps, Row, TablePaginationConfig } from "antd";
 import { FilterValue } from "antd/es/table/interface";
 import useDebounce from "@utils/helpers/customHooks/useDebounce";
 import useWindowSize from "@utils/helpers/ReactHelper";
@@ -14,6 +14,7 @@ import { PushNavigateTo } from "@utils/helpers/Route";
 import { useTicketQuery } from "@services/reactQuery/ticket";
 import TicketTable from "@components/Ticket/TableTicket";
 import ModalScan from "@components/Ticket/ModalScan";
+import ModalAddTicketBulk from "@components/Ticket/ModalAddBulkTicket";
 
 
 const TicketsPage = (session: Sessions) => {
@@ -28,6 +29,7 @@ const TicketsPage = (session: Sessions) => {
 
     const [search, setSearch] = useState("");
     const [filters, setFilters] = useState<Record<string, FilterValue | null>>();
+    const [visible, setVisible] = useState<boolean>(false)
     const [modal, setModal] = useState(false)
     const debouncedSearch = useDebounce(search, 500);
 
@@ -41,10 +43,36 @@ const TicketsPage = (session: Sessions) => {
 
     const dataList = dataListTicket?.data?.data?.data
 
+    const items: MenuProps['items'] = [
+        {
+            label: 'Single Ticket',
+            key: '1',
+            onClick: () => {
+                PushNavigateTo("tickets/add")
+            }
+        },
+        {
+            label: 'Bulk Ticket',
+            key: '2',
+            onClick: () => {
+                setVisible(true)
+            }
+        },
+    ];
+
+    const menuProps = {
+        items,
+    };
+
     return (
         <>
             <HeadPage withDefaultCss title="Tickets" />
             <DashboardLayout session={session}>
+                <ModalAddTicketBulk
+                    session={session}
+                    setVisible={setVisible}
+                    visible={visible}
+                />
                 <Row justify="space-between" align="middle" gutter={[10, 20]}>
                     <Col xs={16} sm={16} md={16} lg={16}>
                         <Input.Search
@@ -53,7 +81,14 @@ const TicketsPage = (session: Sessions) => {
                         />
                     </Col>
                     <Col xs={4} sm={4} md={4} lg={4}>
-                        <Button
+                        <Dropdown.Button
+                            menu={menuProps}
+                            type="primary" 
+                            icon={<PlusOutlined rev={""} />}
+                        >
+                            {isMobile ? "" : "Add Ticket"}
+                        </Dropdown.Button>
+                        {/* <Button
                             onClick={() => { PushNavigateTo("tickets/add") }}
                             block={isMobile}
                             type="primary"
@@ -61,7 +96,7 @@ const TicketsPage = (session: Sessions) => {
                             icon={<PlusOutlined rev={""} />}
                         >
                             {isMobile ? "" : "Add Ticket"}
-                        </Button>
+                        </Button> */}
                     </Col>
                     <Col xs={4} sm={4} md={4} lg={4}>
                         <Button

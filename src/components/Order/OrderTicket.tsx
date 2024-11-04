@@ -1,5 +1,5 @@
 import handleSessions from "@pages/api/GetSession";
-import { Image, Table, TableProps, Tag } from "antd";
+import { Button, Image, Table, TableProps, Tag } from "antd";
 import { Sessions } from "types/Session";
 import { IEvent } from "types/event/index";
 import customFooterPagination from "@components/Partial/customFooterPagination";
@@ -7,6 +7,9 @@ import getUserRole from "@utils/helpers/getUserRoles";
 import { useQueryClient } from "@tanstack/react-query";
 import { IOrders } from "types/ticket/index";
 import UnitConvert from "@components/Util/UnitConvert";
+import ModalPrintReceipt from "@components/Ticket/ModalPrintReceipt";
+import { useState } from "react";
+import { PrinterOutlined } from "@ant-design/icons";
 
 interface IOrderTicket {
     session: Sessions | undefined;
@@ -25,6 +28,9 @@ const OrderTable = ({
 }: IOrderTicket) => {
     const role = getUserRole(session)
     const uq = useQueryClient();
+
+    const [modal, setModal] = useState<boolean>(false)
+    const [id, setId] = useState<number | null>()
 
     return (
         <>
@@ -64,6 +70,11 @@ const OrderTable = ({
                     render={(_value, item: IOrders) => item?.user?.name }
                 />
                 <Table.Column
+                    title="Order Email"
+                    dataIndex="order-email"
+                    render={(_value, item: IOrders) => item?.user?.email }
+                />
+                <Table.Column
                     title="NISN/NIK"
                     dataIndex="no_document"
                     render={(_value, item: IOrders) => item?.user?.no_document }
@@ -77,6 +88,11 @@ const OrderTable = ({
                     title="Amount"
                     dataIndex="amount"
                     render={(_value, item: IOrders) => item?.total_amount}
+                />
+                <Table.Column
+                    title="Tgl Order"
+                    dataIndex="date"
+                    render={(_value, item: IOrders) => UnitConvert?.FormatDateClassic(item?.created_at)}
                 />
                 <Table.Column
                     title="Status"
@@ -115,10 +131,25 @@ const OrderTable = ({
                                     danger
                                 />
                             </Popconfirm> */}
+                            <Button
+                                type="link"
+                                icon={<PrinterOutlined rev={""} />}
+                                onClick={() => {
+                                    setModal(true)
+                                    setId(item?.id)
+                                }}
+                            />
                         </>
                     )}
                 />
             </Table>
+
+            <ModalPrintReceipt
+                session={session}
+                setVisible={setModal}
+                visible={modal}
+                id={id}
+            />
         </>
     )
 }

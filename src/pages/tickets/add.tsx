@@ -3,7 +3,7 @@ import handleSessions from "@pages/api/GetSession";
 import HeadPage from "@components/Global/Header/HeadPage";
 import DashboardLayout from "@layouts/DashboardLayout";
 import useNavbar from "@layouts/customHooks/useNavbar";
-import { Button, Card, Col, Descriptions, Form, Input, Row, Select, Steps, Upload } from "antd";
+import { Button, Card, Col, Descriptions, Form, Input, Row, Segmented, Select, Steps, Upload } from "antd";
 import useWindowSize from "@utils/helpers/ReactHelper";
 import { useState } from "react";
 import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
@@ -15,6 +15,7 @@ import useFetcher from "@api/customHooks/useFetcher";
 import { showSuccess } from "@utils/helpers/AntdHelper";
 import { useQueryClient } from "@tanstack/react-query";
 import { PushNavigateTo } from "@utils/helpers/Route";
+import { validateDecimal } from "@utils/helpers/decimalHelper";
 
 const TicketsAddPage = (session: Sessions) => {
     useNavbar(["tickets"], [{ name: "Tickets", url: "/tickets" }, { name: "Add Tickets", url: "/tickets/add" }]);
@@ -29,7 +30,7 @@ const TicketsAddPage = (session: Sessions) => {
     const [attachments, setAttachments] = useState<any[]>([]);
 
     const [formData, setFormData] = useState({
-        personalInfo: { name: '', email: '', no_doc: '', type_ticket: 'Regular', price: '', type_doc: 'NISN' },
+        personalInfo: { name: '', email: '', no_doc: '', type_ticket: 'Regular', price: '', type_doc: 'NISN', already_paid: "" },
         ticketHolders: [{ name: '', email: '', no_doc: '', type_doc_type_holder: '' }],
         attachments: [{ upload: '' }]
     });
@@ -47,7 +48,7 @@ const TicketsAddPage = (session: Sessions) => {
                     [key]: value
                 }
             };
-            
+
             if (step === 'personalInfo') {
                 // Update ticketHolders with the new personalInfo data as the first index
                 updatedData.ticketHolders = [
@@ -60,10 +61,10 @@ const TicketsAddPage = (session: Sessions) => {
                     ...updatedData.ticketHolders.slice(1)
                 ];
             }
-            
+
             return updatedData;
         });
-    };    
+    };
 
     const addTicketHolder = () => {
         setFormData((prevState) => ({
@@ -125,6 +126,7 @@ const TicketsAddPage = (session: Sessions) => {
             const params: {
                 name: string,
                 type_ticket: string,
+                already_paid: string,
                 email: string,
                 no_doc: string,
                 price: string,
@@ -141,6 +143,7 @@ const TicketsAddPage = (session: Sessions) => {
             } = {
                 name: formData?.personalInfo?.name,
                 type_ticket: formData?.personalInfo?.type_ticket,
+                already_paid: formData.personalInfo.already_paid,
                 type_doc: formData?.personalInfo?.type_doc,
                 email: formData?.personalInfo?.email,
                 no_doc: formData?.personalInfo?.no_doc,
@@ -255,7 +258,15 @@ const TicketsAddPage = (session: Sessions) => {
                             <Form.Item
                                 label="Price per Ticket"
                                 name="price"
-                                rules={[{ required: true, message: 'Please enter the price' }]}
+                                required
+                                initialValue={0}
+                                rules={[
+                                    { validator: validateDecimal },
+                                    {
+                                        required: true,
+                                        message: "harap masukkan unit",
+                                    },
+                                ]}
                             >
                                 <Input
                                     placeholder="Price"
@@ -276,6 +287,27 @@ const TicketsAddPage = (session: Sessions) => {
                                         { label: 'Regular', value: 'Regular' },
                                         { label: 'Presale 1', value: 'Presale 1' }
                                     ]}
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                label="Already paid"
+                                name="already_paid"
+                                // rules={[{ required: true, message: 'Please select a ticket type' }]}
+                            >
+                                <Segmented
+                                    options={[
+                                        {
+                                            label: "Paid",
+                                            value: 2,
+                                        },
+                                        {
+                                            label: "Un-Paid",
+                                            value: 1,
+                                        },
+                                    ]}
+                                    value={formData.personalInfo.already_paid}
+                                    onChange={(value) => handleChange('personalInfo', 'already_paid', value)}
+                                    block
                                 />
                             </Form.Item>
                         </Col>

@@ -3,7 +3,7 @@ import useFetcher from "@api/customHooks/useFetcher";
 import { handlingError } from "@pages/_app";
 import { useQueryClient } from "@tanstack/react-query";
 import { showError, showSuccess } from "@utils/helpers/AntdHelper";
-import { DatePicker, Form, Input, Modal, Spin, Switch } from "antd";
+import { DatePicker, Form, Input, Modal, Segmented, Spin, Switch } from "antd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IEvent } from "types/event/index";
 import { Sessions } from "types/Session";
@@ -25,6 +25,8 @@ const ModalScan = ({
     const { FetcherPost, isLoading } = useFetcher(session);
     const { handleLogout } = useAuth();
     const [scan, setScan] = useState(false);
+    const [noDoc, setNoDoc] = useState<String>("")
+    const [mode, setMode] = useState<"scan" | "manual">("scan")
 
     useEffect(() => {
         if (visible) {
@@ -40,7 +42,9 @@ const ModalScan = ({
                 url: "/api/ticket/qr-scan",
                 api: "API",
                 data: {
-                    qr_code
+                    qr_code,
+                    mode,
+                    noDoc
                 }
             });
 
@@ -55,9 +59,13 @@ const ModalScan = ({
                 uq.refetchQueries([
                     "useTicketQuery",
                 ])
-                setScan(false);
-                setVisible(false)
+                
             }
+            setScan(false);
+            setVisible(false)
+            setMode("scan")
+            setNoDoc("")
+            form.resetFields();
         } catch (error) {
             setVisible(false)
             setScan(false);
@@ -74,19 +82,45 @@ const ModalScan = ({
                 form.resetFields();
             }}
             onOk={() => {
-                // handleSubmit()
+                doScan()
             }}
             title={`Scan Ticket`}
         >
             {isLoading ? (
                 <Spin tip="Processing QR Code..." />
             ) : (
-                <QRCodeScanner
-                    scan={scan}
-                    onFinish={(idQr) => {
-                        doScan(idQr)
-                    }}
-                />
+                <>
+                    <Segmented
+                        options={['scan', 'manual']}
+                        style={{ marginBottom: 10 }}
+                        onChange={(value) => {
+                            setMode(value as "manual" | "scan")
+                        }}
+                    />
+                    {mode === "scan" ? (
+                        <QRCodeScanner
+                            scan={scan}
+                            onFinish={(idQr) => {
+                                doScan(idQr)
+                            }}
+                        />
+                    ) : (
+                        <Form form={form} layout="vertical" style={{ marginTop: 10 }}>
+                            <Form.Item
+                                label="NISN / NIK"
+                                name="no_doc"
+                                rules={[{ required: true, message: 'Please enter your name' }]}
+                            >
+                                <Input
+                                    placeholder="NISN / NIK"
+                                    onChange={(e) => {
+                                        setNoDoc(e?.target?.value)
+                                    }}
+                                />
+                            </Form.Item>
+                        </Form>
+                    )}
+                </>
             )}
         </Modal>
     </>);
