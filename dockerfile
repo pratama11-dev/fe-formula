@@ -1,12 +1,12 @@
-from node:16-alpine as deps
+FROM node:16-alpine as deps
 
-run apk update && apk add git
+RUN apk update && apk add git
 
-run mkdir /app
-workdir /app
-run cd /app && git clone https://puthere@github.com/put-here.git .
-run git pull
-run npm i
-run npm run build
+RUN mkdir /app
+WORKDIR /app
+RUN cd /app && git clone https://puthere@github.com/put-here.git .
+RUN git pull
+RUN npm i
+RUN npm run build
 
-cmd ["npm", "run", "start"]
+CMD ["npm", "run", "start"]
