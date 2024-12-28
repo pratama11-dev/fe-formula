@@ -8,6 +8,7 @@ import useFetcher, {
 import { handlingError } from "@pages/_app";
 import { Button } from "antd";
 import { useState } from "react";
+import { MdPrint } from "react-icons/md";
 import { Sessions } from "types/Session";
 
 interface props {
@@ -73,7 +74,7 @@ function ButtonExport({
         <Button
           disabled={disable}
           onClick={() => handleExport("pdf", method)}
-          icon={<PrinterOutlined rev="label" />}
+          icon={<MdPrint />}
           loading={isLoading.pdf}
           ghost
           type="link"
@@ -86,7 +87,7 @@ function ButtonExport({
         <Button
           disabled={disable}
           onClick={() => handleExport("excel", method)}
-          icon={<PrinterOutlined rev="label" />}
+          icon={<MdPrint />}
           loading={isLoading.excel}
           ghost
           type="link"
